@@ -1,11 +1,13 @@
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/model/user";
 import { usernameValidation } from "@/schemas/signUpSchema";
+import { NextRequest, NextResponse } from "next/server"; // Correct import
 import { z } from "zod";
 
 const usernameQuerySchema = z.object({ username: usernameValidation });
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  // Use NextRequest
   await dbConnect();
 
   try {
@@ -17,7 +19,8 @@ export async function GET(request: Request) {
     if (!result.success) {
       const usernameErrors = result.error.format().username?._errors || [];
 
-      return Response.json(
+      return NextResponse.json(
+        // Use NextResponse
         {
           success: false,
           message: usernameErrors?.length > 0 ? usernameErrors.join(", ") : "Invalid query parameters",
@@ -34,7 +37,7 @@ export async function GET(request: Request) {
     });
 
     if (existingUser) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "username already taken",
@@ -43,7 +46,7 @@ export async function GET(request: Request) {
       );
     }
 
-    return Response.json(
+    return NextResponse.json(
       {
         success: true,
         message: "username avaliable",
@@ -51,16 +54,13 @@ export async function GET(request: Request) {
       { status: 200 }
     );
   } catch (err) {
-    console.log("error checking username", err);
-    return Response.json(
+    console.error("Error checking username: ", err);
+    return NextResponse.json(
       {
-        succues: true,
-        message: "error  checking username",
-        err,
+        success: false,
+        message: "Error checking username",
       },
-      {
-        status: 500,
-      }
+      { status: 500 } // Correct status code for error
     );
   }
 }
