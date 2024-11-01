@@ -2,20 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* globals.css */
+:root {
+  --background: 255, 255, 255;
+  --foreground: 0, 0, 0;
+  --card: 255, 255, 255;
+  --card-foreground: 0, 0, 0;
+  --popover: 255, 255, 255;
+  --popover-foreground: 0, 0, 0;
+  --primary: 59, 130, 246; /* Example primary color */
+  --primary-foreground: 255, 255, 255;
+  /* Add more variables as needed */
+}
+
+.dark {
+  --background: 17, 24, 39;
+  --foreground: 229, 231, 235;
+  --card: 31, 41, 55;
+  --card-foreground: 229, 231, 235;
+  --popover: 31, 41, 55;
+  --popover-foreground: 229, 231, 235;
+  --primary: 99, 102, 241; /* Example dark primary color */
+  --primary-foreground: 0, 0, 0;
+  /* Add more dark mode variables as needed */
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
 }

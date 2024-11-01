@@ -7,7 +7,6 @@ import { z } from "zod";
 const usernameQuerySchema = z.object({ username: usernameValidation });
 
 export async function GET(request: NextRequest) {
-  // Use NextRequest
   await dbConnect();
 
   try {

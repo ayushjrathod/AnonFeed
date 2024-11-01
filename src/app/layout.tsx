@@ -1,5 +1,7 @@
+import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/context/AuthProvider";
 import "./globals.css";
+import Navbar from "@/components/navbar";
 
 export default function RootLayout({
   children,
@@ -8,9 +10,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className="">{children}</body>
-      </AuthProvider>
+      <body className="">
+        <AuthProvider>
+          {/* <DarkModeToggle /> */}
+          <Navbar />
+          {children}
+          <Toaster />
+        </AuthProvider>
+      </body>
     </html>
   );
 }

@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "AnonFeed",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,15 +10,30 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.70",
+    "@hookform/resolvers": "^3.9.1",
+    "@radix-ui/react-alert-dialog": "^1.1.2",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-separator": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-switch": "^1.1.1",
+    "@radix-ui/react-toast": "^1.2.2",
     "@react-email/components": "0.0.25",
     "ai": "^3.4.29",
+    "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.454.0",
     "mongoose": "^8.7.3",
     "next": "15.0.1",
     "next-auth": "^4.24.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.53.1",
     "resend": "^4.0.1-alpha.0",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "^3.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
