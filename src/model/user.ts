@@ -21,8 +21,8 @@ export interface User extends mongoose.Document {
   username: string;
   email: string;
   password: string;
-  verifyCode: string;
-  verifyCodeExpiry: Date;
+  verifyCode?: string;
+  verifyCodeExpiry?: Date;
   isAcceptingMessage: boolean;
   isVerified: boolean;
   messages: Message[];

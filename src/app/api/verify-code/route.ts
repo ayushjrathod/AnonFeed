@@ -22,9 +22,10 @@ export async function POST(request: NextRequest) {
         }
       );
     }
+    const currentDate = new Date();
 
     // Check if the code matches and is not expired
-    if (user.verifyCode !== code || user.verifyCodeExpiry < new Date()) {
+    if (user.verifyCode !== code || user.verifyCodeExpiry < currentDate) {
       return NextResponse.json(
         {
           success: false,
@@ -38,8 +39,8 @@ export async function POST(request: NextRequest) {
 
     // Update the user's verification status
     user.isVerified = true;
-    user.verifyCode = undefined;
-    user.verifyCodeExpiry = undefined;
+    //user.verifyCode = "";
+    // user.verifyCodeExpiry = "";
     await user.save();
 
     return NextResponse.json(

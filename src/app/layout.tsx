@@ -9,14 +9,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="{popins.className}">
-        <AuthProvider>
+      <AuthProvider>
+        <body className="{popins.className}">
           {/* <DarkModeToggle /> */}
           {/* <Navbar /> */}
           {children}
           <Toaster />
-        </AuthProvider>
-      </body>
+        </body>
+      </AuthProvider>
     </html>
   );
 }
