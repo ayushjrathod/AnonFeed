@@ -1,57 +1,63 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { signInSchema } from "@/schemas/signInSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-const Page = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
+export default function SignInForm() {
   const router = useRouter();
 
-  //zod implementation
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: "",
+      identifier: "",
       password: "",
     },
   });
 
+  const { toast } = useToast();
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn("credentials", {
       redirect: false,
-      identifier: data.email,
+      identifier: data.identifier,
       password: data.password,
     });
+
     if (result?.error) {
-      toast({
-        title: "Error",
-        description: result.error,
-        variant: "destructive",
-      });
+      if (result.error === "CredentialsSignin") {
+        toast({
+          title: "Login Failed",
+          description: "Incorrect username or password",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
     }
+
     if (result?.url) {
       router.replace("/dashboard");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-800">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
-          <h1 className="text-3xl font-semibold text-gray-800">Feedbacker's login here</h1>
-          <p className="mt-2 text-sm text-gray-500">Log into your account</p>
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">Welcome Back to AnonFeed</h1>
+          <p className="mb-4">Feedbackers sign in here!</p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -60,10 +66,8 @@ const Page = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email/username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="email/username" {...field} />
-                  </FormControl>
+                  <FormLabel>Email/Username</FormLabel>
+                  <Input {...field} />
                   <FormMessage />
                 </FormItem>
               )}
@@ -74,27 +78,25 @@ const Page = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
-                  </FormControl>
+                  <Input type="password" {...field} />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting}>
-              Sign in
+            <Button className="w-full" type="submit">
+              Sign In
             </Button>
           </form>
         </Form>
-        <p>
-          New to Feeder
-          <Link href="/sign-up" className="text-blue-600 hover:text-blue-800">
-            Sign up
-          </Link>
-        </p>
+        <div className="text-center mt-4">
+          <p>
+            Not a member yet?{" "}
+            <Link href="/sign-up" className="text-blue-600 hover:text-blue-800">
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
-};
-
-export default Page;
+}

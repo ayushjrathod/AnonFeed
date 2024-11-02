@@ -4,11 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   await dbConnect();
-
   const { username, content } = await request.json();
 
   try {
-    const user = await UserModel.findOne({ username });
+    const user = await UserModel.findOne({ username }).exec();
     if (!user) {
       return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
     }

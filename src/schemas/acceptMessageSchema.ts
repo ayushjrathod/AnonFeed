@@ -7,7 +7,7 @@ const messageContentValidation = z
 
 const messageIdValidation = z.string().uuid({ message: "Invalid message ID format" });
 
-export const acceptMessageSchema = z.object({
+export const AcceptMessageSchema = z.object({
   messageId: messageIdValidation,
   content: messageContentValidation,
 });
