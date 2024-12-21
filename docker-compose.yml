@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URL=mongodb+srv://clashofa1057:temppass@cluster0.fqzvj3u.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0
+      - NEXTAUTH_SECRET=secret
+      - NEXTAUTH_URL=http://localhost:3000
+      - RESEND_API_KEY=re_KxkjDedz_FcBsXvTRXGRtkbjaJojXPJNq
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next

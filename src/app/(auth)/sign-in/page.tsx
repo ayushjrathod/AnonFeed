@@ -1,54 +1,71 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { signInSchema } from "@/schemas/signInSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { useState, useRef } from "react";
 
 export default function SignInForm() {
   const router = useRouter();
-
-  const form = useForm<z.infer<typeof signInSchema>>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      identifier: "",
-      password: "",
-    },
-  });
-
   const { toast } = useToast();
-  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    const result = await signIn("credentials", {
-      redirect: false,
-      identifier: data.identifier,
-      password: data.password,
-    });
+  const [isLoading, setIsLoading] = useState(false);
 
-    if (result?.error) {
-      if (result.error === "CredentialsSignin") {
-        toast({
-          title: "Login Failed",
-          description: "Incorrect username or password",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: result.error,
-          variant: "destructive",
-        });
-      }
+  const identifierRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  const onSubmit = async () => {
+    const identifier = identifierRef.current?.value || "";
+    const password = passwordRef.current?.value || "";
+
+    if (!identifier || !password) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please fill in all fields.",
+      });
+      return;
     }
 
-    if (result?.url) {
-      router.replace("/dashboard");
+    console.log("Form submitted with data:", { identifier, password });
+
+    try {
+      setIsLoading(true);
+      const result = await signIn("credentials", {
+        identifier,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Invalid credentials",
+        });
+        return;
+      }
+
+      if (result?.ok) {
+        toast({
+          title: "Success",
+          description: "Signed in successfully",
+        });
+        router.push("/dashboard");
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Sign-in error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Something went wrong",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,35 +76,19 @@ export default function SignInForm() {
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">Welcome Back to AnonFeed</h1>
           <p className="mb-4">Feedbackers sign in here!</p>
         </div>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              name="identifier"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email/Username</FormLabel>
-                  <Input {...field} />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="password"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" {...field} />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button className="w-full" type="submit">
-              Sign In
-            </Button>
-          </form>
-        </Form>
+        <form className="space-y-6">
+          <div>
+            <Label htmlFor="identifier">Email/Username</Label>
+            <Input id="identifier" type="text" ref={identifierRef} />
+          </div>
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <Input id="password" type="password" ref={passwordRef} />
+          </div>
+          <Button className="w-full" type="button" onClick={onSubmit} disabled={isLoading}>
+            {isLoading ? "Signing in..." : "Sign In"}
+          </Button>
+        </form>
         <div className="text-center mt-4">
           <p>
             Not a member yet?{" "}

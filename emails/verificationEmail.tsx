@@ -105,7 +105,7 @@ export default function VerificationEmail({ username, otp }: VerificationEmailPr
             <code style={code}>{otp}</code>
 
             <Button style={button} href="#">
-              Verify Email Address
+              Verify Email Address(currently this doesn't work)
             </Button>
 
             <Text style={paragraph}>If you didn't create an account, you can safely ignore this email.</Text>

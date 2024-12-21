@@ -13,5 +13,10 @@
     "title": "Message from CuriousMind",
     "content": "Can you suggest more articles on this topic?",
     "received": "3 days ago"
+  },
+  {
+    "title": "Message from Admin",
+    "content": "Your account has been suspended due to violation of terms and conditions",
+    "received": "1 week ago"
   }
 ]
